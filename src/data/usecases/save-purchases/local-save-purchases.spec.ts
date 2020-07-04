@@ -1,14 +1,5 @@
-class LocalSavePurchases {
-  constructor(private readonly cacheStore: CacheStore) {}
-
-  async save() {
-    this.cacheStore.delete('purchases')
-  }
-}
-
-interface CacheStore {
-  delete(key: string): void
-}
+import { LocalSavePurchases } from '@/data/usecases'
+import { CacheStore } from '@/data/protocols/cache'
 
 class CacheStoreSpy implements CacheStore {
   key: string
