@@ -4,6 +4,7 @@ import { CacheStore } from '@/data/protocols/cache'
 class CacheStoreSpy implements CacheStore {
   key: string
   deleteCallsCount = 0
+  insertCallsCount = 0
 
   delete (key: string) {
     this.deleteCallsCount++
@@ -37,5 +38,13 @@ describe('LocalSavePurchases', () => {
     await sut.save()
     expect(cacheStore.deleteCallsCount).toBe(1)
     expect(cacheStore.key).toBe('purchases')
+  })
+
+  test('should not insert new cache if delete fails', async () => {
+    const { sut, cacheStore } = makeSut()
+    jest.spyOn(cacheStore, 'delete').mockImplementationOnce(() => { throw new Error() })
+    const promise = sut.save()
+    expect(cacheStore.insertCallsCount).toBe(0)
+    await expect(promise).rejects.toThrow()
   })
 })
