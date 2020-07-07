@@ -5,5 +5,6 @@ export class LocalSavePurchases {
 
   async save() {
     this.cacheStore.delete('purchases')
+    this.cacheStore.insert('purchases')
   }
 }
