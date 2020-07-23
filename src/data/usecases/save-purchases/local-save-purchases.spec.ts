@@ -54,6 +54,6 @@ describe('LocalSavePurchases', () => {
     const promise = sut.save(mockPurchases())
 
     expect(cacheStore.messages).toEqual([CacheStoreSpy.Messages.delete, CacheStoreSpy.Messages.insert])
-    expect(promise).rejects.toThrow()
+    await expect(promise).rejects.toThrow()
   })
 })
