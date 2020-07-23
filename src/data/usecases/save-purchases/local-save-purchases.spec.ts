@@ -22,13 +22,6 @@ describe('LocalSavePurchases', () => {
     expect(cacheStore.messages).toEqual([])
   })
 
-  test('should delete old cache before save', async () => {
-    const { sut, cacheStore } = makeSut()
-    await sut.save(mockPurchases())
-    expect(cacheStore.messages).toEqual([CacheStoreSpy.Messages.delete, CacheStoreSpy.Messages.insert])
-    expect(cacheStore.deleteKey).toBe('purchases')
-  })
-
   test('should not insert new cache if delete fails', async () => {
     const { sut, cacheStore } = makeSut()
     cacheStore.simulateDeleteError()
@@ -44,6 +37,7 @@ describe('LocalSavePurchases', () => {
     await sut.save(purchases)
 
     expect(cacheStore.messages).toEqual([CacheStoreSpy.Messages.delete, CacheStoreSpy.Messages.insert])
+    expect(cacheStore.deleteKey).toBe('purchases')
     expect(cacheStore.insertKey).toBe('purchases')
     expect(cacheStore.insertValue).toEqual(purchases)
   })
