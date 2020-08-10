@@ -1,5 +1,6 @@
 import { CacheStore } from '@/data/protocols/cache'
 import { SavePurchases, LoadPurchases } from '@/domain/usecases'
+import CachePolicy from '@/data/protocols/cache/cache-policy'
 
 export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
   private readonly key = 'purchases'
@@ -19,10 +20,8 @@ export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
   async loadAll() {
     try {
       const cache = this.cacheStore.fetch(this.key)
-      const maxDate = new Date(cache.timestamp)
-      maxDate.setDate(maxDate.getDate() + 3)
-
-      if (maxDate > this.currentDate) {
+    
+      if (CachePolicy.validate(cache.timestamp, this.currentDate)) {
         return cache.value
       }
 
