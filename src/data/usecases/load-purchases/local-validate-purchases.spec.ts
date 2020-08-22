@@ -21,4 +21,14 @@ describe('LocalLoadPurchases', () => {
     const { cacheStore } = makeSut()
     expect(cacheStore.actions).toEqual([])
   })
+
+  test('should delete cache if load fails', () => {
+    const { cacheStore, sut } = makeSut()
+    cacheStore.simulateFetchError()
+    sut.validate()
+
+    expect(cacheStore.actions)
+      .toEqual([CacheStoreSpy.Actions.fetch, CacheStoreSpy.Actions.delete])
+    expect(cacheStore.deleteKey).toBe('purchases')
+  })
 })
